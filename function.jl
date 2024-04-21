@@ -48,7 +48,7 @@ function count_visited(visited::Vector{Int})
 end
 
 function dominates(label1::Tuple{Int64, Int64, Vector{Int64}, Real}, label2::Tuple{Int64, Int64, Vector{Int64}, Real})
-    @show label1, label2
+    # @show label1, label2
     Q1, s1, v1, C1 = label1
     Q2, s2, v2, C2 = label2
     

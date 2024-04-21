@@ -10,7 +10,7 @@ pi_i = CSV.read("dual_var_P-n16-k8.csv", DataFrame, header = false)
 p = 1
 alpha = 1.3
 labels = Dict{Int, Array{Tuple{Int, Int, Vector{Int}, Float64}, 1}}()
-for node in 1:cvrp.dimension 
+for node in 1:cvrp.dimension
     labels[node] = []
 end
 labels[p] = [(0, 0, [0 for _ in 1:cvrp.dimension], 0.0)]
@@ -18,6 +18,7 @@ E = Set([p])
 
 while !isempty(E)
     # vi = pop!(E)
+    # @show E
     vi = first(E)
     for vj in 1:cvrp.dimension
     # if vi != vj
