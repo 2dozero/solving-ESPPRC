@@ -34,23 +34,27 @@ while !isempty(E)
             end
         end
         old_labels_vj = labels[vj]
-        labels[vj] = EFF(Fij ∪ labels[vj])
+        # labels[vj] = EFF(Fij ∪ labels[vj])
+        labels[vj] = EFF(Fij, labels[vj])
 
         if labels_have_changed(old_labels_vj, labels[vj])
             push!(E, vj)
         end
-
-        # if all(labels[vj][1][3] .== 1)
-        #     @show labels[vj]
-        #     # Send the vehicle back to node 1
-        #     Q, s_i, v, C = labels[vj][1]
-        #     @show (euclidean_distance(cvrp, vj, 1) - alpha * pi_i[1, 1])
-        #     C += (euclidean_distance(cvrp, vj, 1) - alpha * pi_i[1, 1])
-        #     labels[vj][1] = (Q, s_i, v, C)
-        # end
 
     delete!(E, vi)
     end
 end
 
 @show labels
+
+min_cost = Inf
+for label_list in values(labels)
+    for label in label_list
+        cost = label[4]  # Assuming the cost is the 4th element in the label tuple
+        if cost < min_cost
+            min_cost = cost
+        end
+    end
+end
+
+println("Minimum cost: ", min_cost)
