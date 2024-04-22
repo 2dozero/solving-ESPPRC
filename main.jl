@@ -22,7 +22,7 @@ while !isempty(E)
     vi = first(E)
     for vj in 1:cvrp.dimension
     # if vi != vj
-        Fij = Tuple{Int64, Int64, Vector{Int64}, Float64}[]
+        Fij = Vector{Tuple{Int64, Int64, Vector{Int64}, Float64}}()
         for label in labels[vi]
             if label[3][vj] == 0
                 extended_label = extend(label, vi, vj, cvrp, alpha, pi_i)
@@ -33,6 +33,31 @@ while !isempty(E)
                 push!(Fij, extended_label)
             end
         end
+        # for (Q, s_i, v, C) in Fij
+        #     # @show v
+        #     if all(vi -> vi == 1, v)
+        #         distance = euclidean_distance(cvrp, vi, 1)
+        #         # @show C
+        #         C = C + distance - alpha * pi_i[1, 1]
+        #         # @show C
+        #         push!(Fij, (Q, s_i, v, C))
+        #     end
+        # end
+        new_Fij = Vector{Tuple{Int64, Int64, Vector{Int64}, Float64}}()
+        for (Q, s_i, v, C) in Fij
+            if all(vi -> vi == 1, v)
+                distance = euclidean_distance(cvrp, vi, 1)
+                println("..")
+                @show C
+                C = C + distance - alpha * pi_i[1, 1]
+                push!(new_Fij, (Q, s_i, v, C))
+                @show C
+            else
+                push!(new_Fij, (Q, s_i, v, C))  # If v is not all ones, keep the original tuple
+            end
+        end
+        Fij = new_Fij
+
         old_labels_vj = labels[vj]
         # labels[vj] = EFF(Fij ∪ labels[vj])
         labels[vj] = EFF(Fij, labels[vj])
